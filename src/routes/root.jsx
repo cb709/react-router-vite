@@ -1,8 +1,14 @@
 import { Link, Outlet, useLoaderData } from "react-router-dom";
+import { getContacts } from "../contacts";
+
+export async function loader() {
+    const contacts = await getContacts();
+    return { contacts };
+  }
 
 export default function Root() {
-    const contacts = useLoaderData();
-    console.log(contacts[0])
+    const {contacts} = useLoaderData();
+    // console.log(contacts[0])
     return (
       <>
         <div id="sidebar">
@@ -36,9 +42,9 @@ export default function Root() {
               {contacts.map((contact) => (
                 <li key={contact.id}>
                   <Link to={`contacts/${contact.id}`}>
-                    {contact.name ? (
+                    {contact.first || contact.last ? (
                       <>
-                        {contact.name}
+                        {contact.first} {contact.last}
                       </>
                     ) : (
                       <i>No Name</i>
